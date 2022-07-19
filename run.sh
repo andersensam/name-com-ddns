@@ -4,6 +4,7 @@
 cd "$(dirname $0)"
 
 # Load dependencies
+. ./src/namedotcom.sh
 . ./src/namedotcomddns.sh
 
 run () {
@@ -23,5 +24,25 @@ run () {
   return 0
 }
 
+fw () {
+  f [ -z "$MAPIKEY" ]; then >&2 echo "MAPIKEY is not set"; return 1; fi
+  if [ -z "$NETWORKID" ]; then >&2 echo "NETWORKID is not set"; return 1; fi
+  if [ -z "$WGPORT" ]; then >&2 echo "WGPORT is not set"; return 1; fi
+
+  local ip="$( getExternalIp )"
+  if [ -z "$ip" ]; then
+    >&2 echo "failed to fetch ip"
+    return 1
+  fi
+
+  if ! merakiFWUpdate "$MAPIKEY" "$NETWORKID" "$WGPORT" "$ip" ; then
+    >&2 echo "failed to update firewall"
+    return 1
+  fi
+
+  return 0  
+}
+
 run
+fw
 exit $?

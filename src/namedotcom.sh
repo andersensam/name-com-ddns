@@ -18,7 +18,33 @@ nameDotComRequest () {
     return 1
   fi
 
-  local result="$( curl -v -sSf -u "$nameuser:$token" "$url" -X "$method" -H 'Content-Type: application/json' --data "$data" )"
+  local result="$( curl -sSf -u "$nameuser:$token" "$url" -X "$method" -H 'Content-Type: application/json' --data "$data" )"
+  if [[ $? != 0 ]] || [ -z "$result" ]; then
+    >&2 echo "request to '$url' failed"
+    >&2 echo "  data: $data"
+    >&2 echo "  result: $result"
+    return 1
+  fi
+
+  echo "$result"
+  return 0
+}
+
+merakiFWUpdate () {
+  local mapikey="$1"
+  if [ -z "$mapikey" ]; then >&2 echo "meraki api key is not set"; return 1; fi
+  local networkid="$2"
+  if [ -z "$networkid" ]; then >&2 echo "meraki network id is not set"; return 1; fi
+  local wgport="$3"
+  if [ -z "$wgport" ]; then >&2 echo "wireguard port is not set"; return 1; fi
+  local ipv6="$4"
+  if [ -z "$ipv6" ]; then >&2 echo "target ipv6 address is not set"; return 1; fi
+
+  local url="https://api.meraki.com/api/v1/networks/$networkid/appliance/firewall/inboundFirewallRules"
+  local auth_header="X-Cisco-Meraki-API-Key:$mapikey"
+  local data="{\"rules\":[{\"comment\":\"WireGuard\",\"policy\":\"allow\",\"protocol\":\"udp\",\"srcPort\":\"Any\",\"srcCidr\":\"Any\",\"destPort\":\"$wgport\",\"destCidr\":\"$ipv6/128\",\"syslogEnabled\":false}]}"
+
+  local result="$( curl -sSf "$url" -X PUT -H \'$auth_header\' -H 'Content-Type: application/json' --data "$data" )"
   if [[ $? != 0 ]] || [ -z "$result" ]; then
     >&2 echo "request to '$url' failed"
     >&2 echo "  data: $data"
