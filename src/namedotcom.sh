@@ -41,10 +41,10 @@ merakiFWUpdate () {
   if [ -z "$ipv6" ]; then >&2 echo "target ipv6 address is not set"; return 1; fi
 
   local url="https://api.meraki.com/api/v1/networks/$networkid/appliance/firewall/inboundFirewallRules"
-  local auth_header="\'X-Cisco-Meraki-API-Key:$mapikey\'"
+  local auth_header="X-Cisco-Meraki-API-Key:$mapikey"
   local data="{\"rules\":[{\"comment\":\"WireGuard\",\"policy\":\"allow\",\"protocol\":\"udp\",\"srcPort\":\"Any\",\"srcCidr\":\"Any\",\"destPort\":\"$wgport\",\"destCidr\":\"$ipv6/128\",\"syslogEnabled\":false}]}"
 
-  local result="$( curl -v -sSf "$url" -X PUT -H $auth_header -H 'Content-Type: application/json' --data "$data" )"
+  local result="$( curl -v -sSf "$url" -X PUT -H \'$auth_header\' -H 'Content-Type: application/json' --data "$data" )"
   if [[ $? != 0 ]] || [ -z "$result" ]; then
     >&2 echo "request to '$url' failed"
     >&2 echo "  data: $data"
