@@ -25,7 +25,7 @@ run () {
 }
 
 fw () {
-  f [ -z "$MAPIKEY" ]; then >&2 echo "MAPIKEY is not set"; return 1; fi
+  if [ -z "$MAPIKEY" ]; then >&2 echo "MAPIKEY is not set"; return 1; fi
   if [ -z "$NETWORKID" ]; then >&2 echo "NETWORKID is not set"; return 1; fi
   if [ -z "$WGPORT" ]; then >&2 echo "WGPORT is not set"; return 1; fi
 
