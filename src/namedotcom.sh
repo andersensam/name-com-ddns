@@ -1,8 +1,8 @@
 #!/usr/bin/env sh
 
 nameDotComRequest () {
-  local username="$1"
-  if [ -z "$username" ]; then >&2 echo "username is not set"; return 1; fi
+  local nameuser="$1"
+  if [ -z "$nameuser" ]; then >&2 echo "nameuser is not set"; return 1; fi
   local token="$2"
   if [ -z "$token" ]; then >&2 echo "token is not set"; return 1; fi
   local url="$3"
@@ -18,7 +18,7 @@ nameDotComRequest () {
     return 1
   fi
 
-  local result="$( curl -sSf -u "$username:$token" "$url" -X "$method" -H 'Content-Type: application/json' --data "$data" )"
+  local result="$( curl -v -sSf -u "$nameuser:$token" "$url" -X "$method" -H 'Content-Type: application/json' --data "$data" )"
   if [[ $? != 0 ]] || [ -z "$result" ]; then
     >&2 echo "request to '$url' failed"
     >&2 echo "  data: $data"
@@ -31,8 +31,8 @@ nameDotComRequest () {
 }
 
 listRecords () {
-  local username="$1"
-  if [ -z "$username" ]; then >&2 echo "username is not set"; return 1; fi
+  local nameuser="$1"
+  if [ -z "$nameuser" ]; then >&2 echo "nameuser is not set"; return 1; fi
   local token="$2"
   if [ -z "$token" ]; then >&2 echo "token is not set"; return 1; fi
   local domainName="$3"
@@ -46,7 +46,7 @@ listRecords () {
     local perPage=1000
   fi
 
-  local records="$( nameDotComRequest "$username" "$token" "https://api.name.com/v4/domains/$domainName/records" "GET" "{\"page\":$page, \"perPage\":$perPage}" )"
+  local records="$( nameDotComRequest "$nameuser" "$token" "https://api.name.com/v4/domains/$domainName/records" "GET" "{\"page\":$page, \"perPage\":$perPage}" )"
   if [[ $? != 0 ]] || [ -z "$records" ]; then
     >&2 echo "listRecords for '$domainName' failed"
     return 1
@@ -57,8 +57,8 @@ listRecords () {
 }
 
 getRecordId () {
-  local username="$1"
-  if [ -z "$username" ]; then >&2 echo "username is not set"; return 1; fi
+  local nameuser="$1"
+  if [ -z "$nameuser" ]; then >&2 echo "nameuser is not set"; return 1; fi
   local token="$2"
   if [ -z "$token" ]; then >&2 echo "token is not set"; return 1; fi
   local domainName="$3"
@@ -66,7 +66,7 @@ getRecordId () {
   local host="$4"
   if [ -z "$host" ]; then >&2 echo "host is not set"; return 1; fi
 
-  local records="$( listRecords "$username" "$token" "$domainName" )"
+  local records="$( listRecords "$nameuser" "$token" "$domainName" )"
   if [ -z "$records" ]; then
     >&2 echo "getRecordId for '$domainName' failed"
     return 1
@@ -90,8 +90,8 @@ getRecordId () {
 }
 
 updateRecord () {
-  local username="$1"
-  if [ -z "$username" ]; then >&2 echo "username is not set"; return 1; fi
+  local nameuser="$1"
+  if [ -z "$nameuser" ]; then >&2 echo "nameuser is not set"; return 1; fi
   local token="$2"
   if [ -z "$token" ]; then >&2 echo "token is not set"; return 1; fi
   local domainName="$3"
@@ -105,7 +105,7 @@ updateRecord () {
   local answer="$7"
   if [ -z "$answer" ]; then >&2 echo "answer is not set"; return 1; fi
 
-  if ! nameDotComRequest "$username" "$token" "https://api.name.com/v4/domains/$domainName/records/$id" "PUT" "{\"host\":\"$host\",\"type\":\"$type\",\"answer\":\"$answer\"}"; then
+  if ! nameDotComRequest "$nameuser" "$token" "https://api.name.com/v4/domains/$domainName/records/$id" "PUT" "{\"host\":\"$host\",\"type\":\"$type\",\"answer\":\"$answer\"}"; then
     >&2 echo "updateRecord failed"
     return 1
   fi
@@ -114,8 +114,8 @@ updateRecord () {
 }
 
 updateRecordByHost () {
-  local username="$1"
-  if [ -z "$username" ]; then >&2 echo "username is not set"; return 1; fi
+  local nameuser="$1"
+  if [ -z "$nameuser" ]; then >&2 echo "nameuser is not set"; return 1; fi
   local token="$2"
   if [ -z "$token" ]; then >&2 echo "token is not set"; return 1; fi
   local domainName="$3"
@@ -127,13 +127,13 @@ updateRecordByHost () {
   local answer="$6"
   if [ -z "$answer" ]; then >&2 echo "answer is not set"; return 1; fi
 
-  local id=$( getRecordId "$username" "$token" "$domainName" "$host" )
+  local id=$( getRecordId "$nameuser" "$token" "$domainName" "$host" )
   if [ -z "$id" ]; then
     >&2 echo "updateRecordByHost failed"
     return 1
   fi
 
-  if ! updateRecord "$username" "$token" "$domainName" "$id" "$host" "$type" "$answer" > /dev/null; then
+  if ! updateRecord "$nameuser" "$token" "$domainName" "$id" "$host" "$type" "$answer" > /dev/null; then
     >&2 echo "updateRecordByHost failed"
     return 1
   fi

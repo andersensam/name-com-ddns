@@ -7,7 +7,7 @@ cd "$(dirname $0)"
 . ./src/namedotcomddns.sh
 
 run () {
-  if [ -z "$USERNAME" ]; then >&2 echo "USERNAME is not set"; return 1; fi
+  if [ -z "$NAMEUSER" ]; then >&2 echo "USERNAME is not set"; return 1; fi
   if [ -z "$TOKEN" ]; then >&2 echo "TOKEN is not set"; return 1; fi
   if [ -z "$DOMAINNAME" ]; then >&2 echo "DOMAINNAME is not set"; return 1; fi
   if [ -z "$HOST" ]; then >&2 echo "HOST is not set"; return 1; fi
@@ -15,7 +15,7 @@ run () {
     local TYPE="A"
   fi
 
-  if ! updateRecordByHostWithExternalIp "$USERNAME" "$TOKEN" "$DOMAINNAME" "$HOST" "$TYPE" ; then
+  if ! updateRecordByHostWithExternalIp "$NAMEUSER" "$TOKEN" "$DOMAINNAME" "$HOST" "$TYPE" ; then
     >&2 echo "failed to update record"
     return 1
   fi

@@ -5,8 +5,8 @@
 . ./src/namedotcom.sh
 
 updateRecordByHostWithExternalIp () {
-  local username="$1"
-  if [ -z "$username" ]; then >&2 echo "username is not set"; return 1; fi
+  local nameuser="$1"
+  if [ -z "$nameuser" ]; then >&2 echo "nameuser is not set"; return 1; fi
   local token="$2"
   if [ -z "$token" ]; then >&2 echo "token is not set"; return 1; fi
   local domainName="$3"
@@ -22,7 +22,7 @@ updateRecordByHostWithExternalIp () {
     return 1
   fi
 
-  if ! updateRecordByHost "$username" "$token" "$domainName" "$host" "$type" "$ip"; then
+  if ! updateRecordByHost "$nameuser" "$token" "$domainName" "$host" "$type" "$ip"; then
     >&2 echo "failed to update record"
     return 1
   fi

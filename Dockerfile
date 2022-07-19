@@ -1,5 +1,5 @@
 FROM alpine:latest
-MAINTAINER iam@lowiehuyghe.com
+MAINTAINER samuel@andersentech.net
 
 # Setup source code
 WORKDIR /opt/name-com-ddns

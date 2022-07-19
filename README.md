@@ -1,7 +1,6 @@
 # Name.com Dynamic DNS
 
-Dynamic DNS Script for Name.com
-
+Dynamic DNS Script for Name.com. Forked from: [https://github.com/LowieHuyghe/name-com-ddns]https://github.com/LowieHuyghe/name-com-ddns. Modified to act as a AAAA record updater (IPv6).
 
 ## Usage
 
@@ -13,7 +12,7 @@ services:
   name-com-ddns:
     image: lowieh/name-com-ddns:latest
     environment:
-      - USERNAME=myusername
+      - USERNAME=mynameuser
       - TOKEN=mytoken1234567890
       - DOMAINNAME=mydomain.name
       - HOST=www
@@ -25,7 +24,7 @@ services:
 ```bash
 git clone git@github.com:LowieHuyghe/name-com-ddns.git
 
-USERNAME=myusername \
+USERNAME=mynameuser \
 TOKEN=mytoken1234567890 \
 DOMAINNAME=mydomain.name \
 HOST=www \
