@@ -1,6 +1,6 @@
 # Name.com Dynamic DNS
 
-Dynamic DNS Script for Name.com. Forked from: (https://github.com/LowieHuyghe/name-com-ddns)https://github.com/LowieHuyghe/name-com-ddns. Modified to act as a AAAA record updater (IPv6).
+Dynamic DNS Script for Name.com. Forked from: [https://github.com/LowieHuyghe/name-com-ddns](https://github.com/LowieHuyghe/name-com-ddns). Modified to act as a AAAA record updater (IPv6).
 
 ## Usage
 
