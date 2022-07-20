@@ -14,6 +14,7 @@
 #
 #
 
+import ipaddress
 import requests
 import json
 import os
@@ -87,6 +88,7 @@ def updateRecord(recordType, recordId, ipAddress):
     r = requests.put(targetURL, headers = requestHeaders, auth = (NAMEUSER, TOKEN), data = json.dumps(requestData))
 
     if r.ok:
+        print('Successfully updated record Id {} ({}) with value: {}'.format(recordId, recordType, ipAddress))
         return r.json()
 
     # Print out the response if we receive an error
