@@ -140,11 +140,14 @@ if __name__ == '__main__':
         if envVar not in os.environ:
             raise EnvironmentError("Required environmental variable {} missing. Exiting".format(envVar))
 
+    print(getAddress())
+    print(getAddress('ipv6'))
+
     # Update the records for both IPv4 and IPv6
-    print(updateRecord('A', getRecordId(), getAddress()))
-    print(updateRecord('AAAA', getRecordId(recordType = 'AAAA'), getAddress(addressType = 'ipv6')))
+    updateRecord('A', getRecordId(), getAddress())
+    updateRecord('AAAA', getRecordId(recordType = 'AAAA'), getAddress(addressType = 'ipv6'))
 
     # Update the MX Firewall for the IPv6 address
-    print(updateMXFirewall(getAddress(addressType = 'ipv6')))
+    updateMXFirewall(getAddress(addressType = 'ipv6'))
 
     exit(0)
