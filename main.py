@@ -34,7 +34,7 @@ WGPORT = os.environ.get('WGPORT')
 #  @param addressType Either 'ipv4' or 'ipv6'
 def getAddress(addressType = 'ipv4'):
 
-    targetURL = 'https://api64.ipify.org?format=json'
+    targetURL = 'https://api64.ipify.org:443?format=json'
 
     r = None
 
