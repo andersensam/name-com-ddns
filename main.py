@@ -145,7 +145,7 @@ if __name__ == '__main__':
             raise EnvironmentError("Required environmental variable {} missing. Exiting".format(envVar))
 
     # Update the records for both IPv4 and IPv6
-    updateRecord('A', getRecordId(), getAddress())
+    #updateRecord('A', getRecordId(), getAddress())
     updateRecord('AAAA', getRecordId(recordType = 'AAAA'), getAddress(addressType = 'ipv6'))
 
     # Update the MX Firewall for the IPv6 address
