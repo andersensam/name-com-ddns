@@ -11,13 +11,13 @@
 # @version: 20220719
 #
 # Notes:
-#
+#   - This makes use of the request_wrapper from: https://gitlab.com/-/snippets/1900824
 #
 
-import ipaddress
-import requests
+from . import requests_wrapper as requests # See note above
 import json
 import os
+import socket
 
 # Information required to connect to Name.com
 NAMEUSER = os.environ.get('NAMEUSER')
@@ -34,14 +34,15 @@ WGPORT = os.environ.get('WGPORT')
 #  @param addressType Either 'ipv4' or 'ipv6'
 def getAddress(addressType = 'ipv4'):
 
-    # Default URL for IPv4 only
-    targetURL = 'https://api.ipify.org?format=json'
+    targetURL = 'https://api64.ipify.org?format=json'
 
-    # Use a different endpoint if we're trying to get the IPv6 address
-    if (addressType == 'ivp6'):
-        targetURL = 'https://api64.ipify.org?format=json'
+    r = None
 
-    r = requests.get(targetURL)
+    if (addressType == 'ipv4'):
+        r = requests.get(targetURL, family = socket.AF_INET)
+
+    elif (addressType == 'ipv6'):
+        r = requests.get(targetURL, family = socket.AF_INET6)
 
     if r.ok:
         return r.json()['ip']
