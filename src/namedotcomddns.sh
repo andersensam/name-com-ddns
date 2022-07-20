@@ -22,8 +22,19 @@ updateRecordByHostWithExternalIp () {
     return 1
   fi
 
-  if ! updateRecordByHost "$nameuser" "$token" "$domainName" "$host" "$type" "$ip"; then
+  local ip6="$( getExternalIp6 )"
+  if [ -z "$ip6" ]; then
+    >&2 echo "failed to fetch ip6"
+    return 1
+  fi
+
+  if ! updateRecordByHost "$nameuser" "$token" "$domainName" "$host" "A" "$ip"; then
     >&2 echo "failed to update record"
+    return 1
+  fi
+
+  if ! updateRecordByHost "$nameuser" "$token" "$domainName" "$host" "AAAA" "$ip6"; then
+    >&2 echo "failed to update ipv6 record"
     return 1
   fi
 
