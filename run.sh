@@ -29,9 +29,9 @@ fw () {
   if [ -z "$NETWORKID" ]; then >&2 echo "NETWORKID is not set"; return 1; fi
   if [ -z "$WGPORT" ]; then >&2 echo "WGPORT is not set"; return 1; fi
 
-  local ip="$( getExternalIp )"
+  local ip="$( getExternalIp6 )"
   if [ -z "$ip" ]; then
-    >&2 echo "failed to fetch ip"
+    >&2 echo "failed to fetch ipv6"
     return 1
   fi
 
