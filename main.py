@@ -14,7 +14,7 @@
 #   - This makes use of the request_wrapper from: https://gitlab.com/-/snippets/1900824
 #
 
-from . import requests_wrapper as requests # See note above
+import requests_wrapper as requests # See note above
 import json
 import os
 import socket
