@@ -34,6 +34,8 @@ WGPORT = os.environ.get('WGPORT')
 #  @param addressType Either 'ipv4' or 'ipv6'
 def getAddress(addressType = 'ipv4'):
 
+    # Due to a bug identified about 6 months ago, we must specify the port when specifying the stack
+    # Note that this isn't an issue with the requests in other functions
     targetURL = 'https://api64.ipify.org:443?format=json'
 
     r = None
@@ -125,6 +127,7 @@ def updateMXFirewall(ipAddress):
     r = requests.put(targetURL, headers = requestHeaders, data = json.dumps(requestData))
 
     if r.ok:
+        print('Successfully updated the MX Firewall ruleset. Allowing WireGuard connectivity to {}/128 on port {}'.format(ipAddress, WGPORT))
         return r.json()
 
     # Print out the response if we receive an error
@@ -140,9 +143,6 @@ if __name__ == '__main__':
     for envVar in requiredEnv:
         if envVar not in os.environ:
             raise EnvironmentError("Required environmental variable {} missing. Exiting".format(envVar))
-
-    print(getAddress())
-    print(getAddress('ipv6'))
 
     # Update the records for both IPv4 and IPv6
     updateRecord('A', getRecordId(), getAddress())
